@@ -19,6 +19,31 @@ class Map(geemap.Map):
         }
         self.addLayer(easement.style(**style), {}, "Easements")
 
+        def handle_interaction(**kwargs):
+            latlon = kwargs.get("coordinates")
+            if kwargs.get("type") == "click":
+                selected_layer = self.find_layer("Selected")
+                if selected_layer is not None:
+                    self.remove_layer(selected_layer)
+                self.default_style = {"cursor": "wait"}
+                clicked_point = ee.Geometry.Point(latlon[::-1])
+                selected = easement.filterBounds(clicked_point)
+                if selected.size().getInfo() > 0:
+
+                    selected_style = {
+                        "color": "ffff00",
+                        "width": 2,
+                        "fillColor": "00000020",
+                    }
+                    self.addLayer(selected.style(**selected_style), {}, "Selected")
+                    try:
+                        self._draw_control.last_geometry = selected.geometry()
+                    except:
+                        pass
+                self.default_style = {"cursor": "default"}
+
+        self.on_interaction(handle_interaction)
+
         self.add_ts_gui(position="topright")
 
     def clean_up(self):
@@ -36,6 +61,10 @@ class Map(geemap.Map):
         draw_layer = self.find_layer("Drawn Features")
         if draw_layer is not None:
             self.remove(draw_layer)
+
+        selected_layer = self.find_layer("Selected")
+        if selected_layer is not None:
+            self.remove_layer(selected_layer)
 
     def add_ts_gui(self, position="topright", **kwargs):
 

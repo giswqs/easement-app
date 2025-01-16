@@ -35,6 +35,31 @@ class Map(geemap.Map):
         }
         self.addLayer(easement.style(**style), {}, "Easements")
 
+        def handle_interaction(**kwargs):
+            latlon = kwargs.get("coordinates")
+            if kwargs.get("type") == "click":
+                selected_layer = self.find_layer("Selected")
+                if selected_layer is not None:
+                    self.remove_layer(selected_layer)
+                self.default_style = {"cursor": "wait"}
+                clicked_point = ee.Geometry.Point(latlon[::-1])
+                selected = easement.filterBounds(clicked_point)
+                if selected.size().getInfo() > 0:
+
+                    selected_style = {
+                        "color": "ffff00",
+                        "width": 2,
+                        "fillColor": "00000020",
+                    }
+                    self.addLayer(selected.style(**selected_style), {}, "Selected")
+                    try:
+                        self._draw_control.last_geometry = selected.geometry()
+                    except:
+                        pass
+                self.default_style = {"cursor": "default"}
+
+        self.on_interaction(handle_interaction)
+
     def add_buttons(self, position="topright", **kwargs):
         padding = "0px 5px 0px 5px"
         widget = widgets.VBox(layout=widgets.Layout(padding=padding))
@@ -44,7 +69,7 @@ class Map(geemap.Map):
         bar_btn = widgets.Button(description="Monthly history", layout=layout)
         reset_btn = widgets.Button(description="Reset", layout=layout)
         scale = widgets.IntSlider(
-            min=30, max=1000, value=90, description="Scale", layout=layout, style=style
+            min=30, max=1000, value=30, description="Scale", layout=layout, style=style
         )
         month_slider = widgets.IntRangeSlider(
             description="Months",
