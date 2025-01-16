@@ -52,19 +52,19 @@ class Map(geemap.Map):
                         info.clear_output()
                         info_dict = selected.first().toDictionary().getInfo()
                         info.append_stdout(
-                            str(f"OBJECTID: {info_dict.get("OBJECTID")}") + "\n"
+                            str(f"OBJECTID: {info_dict.get('OBJECTID')}") + "\n"
                         )
                         info.append_stdout(
-                            str(f"NEST_AGREE: {info_dict.get("NEST_AGREE")}") + "\n"
+                            str(f"NEST_AGREE: {info_dict.get('NEST_AGREE')}") + "\n"
                         )
                         info.append_stdout(
-                            str(f"NEST_RESTO: {info_dict.get("NEST_RESTO")}") + "\n"
+                            str(f"NEST_RESTO: {info_dict.get('NEST_RESTO')}") + "\n"
                         )
                         info.append_stdout(
-                            str(f"ClosingDat: {info_dict.get("ClosingDat")}") + "\n"
+                            str(f"ClosingDat: {info_dict.get('ClosingDat')}") + "\n"
                         )
                         info.append_stdout(
-                            str(f"NEST_Acres: {info_dict.get("NEST_Acres")}") + "\n"
+                            str(f"NEST_Acres: {info_dict.get('NEST_Acres')}") + "\n"
                         )
                         # print(info_dict)
 
