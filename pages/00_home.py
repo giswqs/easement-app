@@ -5,7 +5,7 @@ import solara
 def Page():
     with solara.Column(align="center"):
         markdown = """
-        ## Global Surface Water Explorer
+        ## Visualizing Wetland Inundation Dynamics
 
         ![](https://i.imgur.com/cj4wI2y.gif)
         """

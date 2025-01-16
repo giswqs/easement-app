@@ -11,6 +11,14 @@ class Map(geemap.Map):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.add_basemap("Esri.WorldImagery")
+
+        easement = ee.FeatureCollection("projects/ee-giswqs/assets/easements")
+        style = {
+            "color": "ff0000",
+            "width": 2,
+            "fillColor": "00000020",
+        }
+        self.addLayer(easement.style(**style), {}, "Easements")
         self.add_gui_widget(add_header=True)
 
     def clean_up(self):
@@ -271,8 +279,8 @@ class Map(geemap.Map):
 def Page():
     with solara.Column(style={"min-width": "500px"}):
         Map.element(
-            center=[20, -0],
-            zoom=2,
+            center=[40, -100],
+            zoom=4,
             height="750px",
             zoom_ctrl=False,
             measure_ctrl=False,
