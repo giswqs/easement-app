@@ -5,6 +5,7 @@ import ipywidgets as widgets
 from IPython.display import display
 from ipyleaflet import WidgetControl
 import solara
+import matplotlib.pyplot as plt
 
 
 class Map(geemap.Map):
@@ -168,11 +169,26 @@ class Map(geemap.Map):
                     end_month=month_slider.value[1],
                     denominator=1e4,
                     y_label="Area (ha)",
+                    return_df=True,
                 )
 
                 with output:
                     output.clear_output()
-                    display(bar)
+
+                    # Plot the bar chart
+                    plt.figure(figsize=(8, 4))
+                    plt.bar(bar["Month"], bar["Area"])
+
+                    # Adding labels and title
+                    plt.xlabel("Month")
+                    plt.ylabel("Area (ha)")
+                    plt.xticks(
+                        ticks=range(0, len(bar["Month"]), 5),
+                        labels=bar["Month"][::5],
+                        rotation=90,
+                    )
+
+                    plt.show()
                 self.default_style = {"cursor": "default"}
             else:
                 output.clear_output()
