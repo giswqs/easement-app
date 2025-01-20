@@ -135,12 +135,26 @@ class Map(geemap.Map):
                         "title": dict(x=0.5),
                         "margin": dict(l=0, r=0, t=10, b=0),
                     },
-                    return_df=False,
+                    return_df=True,
                 )
 
                 with output:
                     output.clear_output()
-                    display(hist)
+
+                    # Plot the bar chart
+                    plt.figure(figsize=(8, 4))
+                    plt.bar(hist["key"], hist["value"])
+
+                    # Adding labels and title
+                    plt.xlabel("Water Occurrence (%)")
+                    plt.ylabel("Pixel Count")
+                    plt.xticks(
+                        ticks=range(0, len(hist["key"]), 3),
+                        labels=hist["key"][::3],
+                        rotation=90,
+                    )
+
+                    plt.show()
                 self.default_style = {"cursor": "default"}
             else:
                 output.clear_output()
