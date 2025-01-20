@@ -44,6 +44,8 @@ class Map(geemap.Map):
         def handle_interaction(**kwargs):
             latlon = kwargs.get("coordinates")
             if kwargs.get("type") == "click":
+                if hasattr(self, "output"):
+                    self.output.clear_output()
                 selected_layer = self.find_layer("Selected")
                 if selected_layer is not None:
                     self.remove_layer(selected_layer)
@@ -64,6 +66,7 @@ class Map(geemap.Map):
                         pass
 
                     with info:
+
                         info.clear_output()
                         info_dict = selected.first().toDictionary().getInfo()
                         info.append_stdout(
@@ -115,6 +118,7 @@ class Map(geemap.Map):
         self.add_widget(widget, position=position, **kwargs)
         output = widgets.Output()
         self.add_widget(output, position="bottomleft", add_header=False)
+        setattr(self, "output", output)
 
         def hist_btn_click(b):
             region = self.user_roi
